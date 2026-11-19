@@ -1,5 +1,5 @@
-// Host packages vendored from Terminal-3/trinity release testnet-v1.0.12
-// (81f207c00): host:interfaces@2.4.0 and host:tenant@2.0.0. Importing
+// Host interface packages from the Terminal 3 testnet-v1.0.12 release:
+// host:interfaces@2.4.0 and host:tenant@2.0.0. Importing
 // http-with-placeholders puts this contract in the tenant-http-placeholders
 // world. Re-vendor from the release you deploy to if it changes.
 package z:muse-vault-flight@0.9.1;
