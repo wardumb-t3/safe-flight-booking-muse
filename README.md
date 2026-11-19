@@ -55,6 +55,7 @@ Details, and the limits of these guarantees: [docs/architecture.md](docs/archite
 | [`server/`](server/) | Pay server (Node, no dependencies): the checkout page `/pay/<order>`, settling a hold after payment, `/start` and `/edit` redirects, `/api/scan-link`, and **`/muse.md`, the guide Muse follows**. |
 | [`onboarding/`](onboarding/) | The traveller's setup page (Vite, for Vercel): passport scan, T3N sign-in, vault grant, Muse's agent key, edit details, top up credits. Runs entirely in the traveller's browser. |
 | [`setup/`](setup/) | One-time scripts: `operator` (host the contract, create the pay agent) and `traveller` (a terminal alternative to the setup page). |
+| [`examples/`](examples/) | A fictional [sample passport](examples/sample-passport.png) (stamped SPECIMEN) for testing without your own. |
 | [`tools/payment-probe/`](tools/payment-probe/) | A small page that checks Muse can pay on a checkout page you host. |
 | [`docs/`](docs/) | The guides linked above. |
 

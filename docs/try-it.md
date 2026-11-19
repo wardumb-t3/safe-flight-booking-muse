@@ -2,7 +2,7 @@
 
 You can try the whole flow without hosting anything, using the demo that the project maintainers run. It takes about 10 minutes.
 
-> **Testnet demo.** Bookings are Duffel test orders and payments are Stripe test payments: no real ticket, no real charge. The demo can be reset or rate-limited at any time. Scan a passport only if you're comfortable storing it on a testnet vault; you can also use a sample passport image. See the [Disclaimer](../README.md#disclaimer).
+> **Testnet demo.** Bookings are Duffel test orders and payments are Stripe test payments: no real ticket, no real charge. The demo can be reset or rate-limited at any time. Scan a passport only if you're comfortable storing it on a testnet vault; you can use the fictional [sample passport](../examples/README.md) instead. See the [Disclaimer](../README.md#disclaimer).
 
 | Demo endpoint | URL |
 |---|---|
@@ -33,7 +33,7 @@ Muse may ask you to approve visiting `muse-vault-onboarding.vercel.app` and, lat
 
 ## 2. Setup page (the link Muse sends you)
 
-1. **Scan your passport.** Scan the QR code with your phone, or tap **Open the scanner**. Pick **Passport**, review the fields, then **Seal and send**, signing in with your Terminal 3 email. The first time, this also creates your vault (it uses about 1,100 test credits, once).
+1. **Scan your passport**, or the fictional [sample passport](../examples/sample-passport.png). Scan the QR code with your phone, or tap **Open the scanner**. Pick **Passport**, review the fields, then **Seal and send**, signing in with your Terminal 3 email. The first time, this also creates your vault (it uses about 1,100 test credits, once).
 2. Back on the setup page, click **I've sealed it**, then **sign in** with the same email and the code it sends you.
 3. Enter your **title** and **phone**, then click **Connect**. The page lets the flight contract read your passport vault, saves your title and phone inside the enclave, and creates a key for Muse that can only search, hold and check status. It funds that key from your credits.
 4. **Copy the message** it shows and paste it into Muse. When Muse asks for the key, paste it into Muse's **secure credential field**, never in the chat. The key is shown only once.
