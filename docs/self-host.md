@@ -119,11 +119,16 @@ Logs: `journalctl -u muse-vault -f`. Each event is one JSON line.
 
 `onboarding/vercel.json` proxies `/t3/*` to the T3N testnet node, so the page only ever talks to its own origin, and sets a strict content security policy.
 
-Then go back to the VPS: add `ONBOARDING_URL=https://<your-vercel-app>` to `/etc/muse-vault.env` and run `sudo systemctl restart muse-vault`. Now `https://vault.example.com/start` redirects to your setup page, and `/edit` to its edit mode.
+**One address for everything (recommended).** `onboarding/vercel.json` also forwards the pay server's routes (`/muse.md`, `/muse-vault.json`, `/pay/*`, `/api/pay/*`, `/api/scan-link`, `/api/stripe/webhook`) to the pay server, and redirects `/start` and `/edit`. Users then only ever see your Vercel address.
+- In your fork, **replace `https://vault.72-60-43-195.sslip.io` in `onboarding/vercel.json` with your pay server's address.** It currently points at the hosted demo.
+- Use the Vercel address as `--pay-url` when you run `npm run operator`, so `pay_base_url` in `muse-vault.json` matches.
+- The strict security policy deliberately skips the forwarded pay routes, because the pay page loads Stripe.
+
+Then go back to the VPS: add `ONBOARDING_URL=https://<your-vercel-app>` to `/etc/muse-vault.env` and run `sudo systemctl restart muse-vault`. Now the pay server's own `/start` and `/edit` also lead to your setup page, so either address works.
 
 ## 5. Try it as a traveller
 
-Follow [try-it.md](try-it.md), replacing the demo URLs with yours (`https://vault.example.com/muse.md` and `/start`), and use your **second** T3N account as the traveller. Muse setup details: [muse-setup.md](muse-setup.md).
+Follow [try-it.md](try-it.md), replacing the demo URLs with yours (`https://<your-vercel-app>/muse.md` and the setup page), and use your **second** T3N account as the traveller. Muse setup details: [muse-setup.md](muse-setup.md).
 
 ## Running it
 

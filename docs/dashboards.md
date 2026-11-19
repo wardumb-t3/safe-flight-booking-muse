@@ -50,6 +50,7 @@ Optional: **Duffel Payments** (Duffel's own card form) must be enabled by Duffel
 | Framework | Vite (`vercel.json` sets the build and output) |
 | Production branch | The branch with your `muse-vault.json` (usually `main`) |
 | Environment variables | None required. Optional: `VITE_SCANNER_URL` |
+| `onboarding/vercel.json` | Forwards the pay routes to your pay server. Set its address there |
 
 **Deployments** shows each build. Every push to the production branch redeploys.
 

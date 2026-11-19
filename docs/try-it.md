@@ -6,9 +6,9 @@ You can try the whole flow without hosting anything, using the demo that the pro
 
 | Demo endpoint | URL |
 |---|---|
-| Setup page | https://vault.72-60-43-195.sslip.io/start |
-| Guide Muse reads | https://vault.72-60-43-195.sslip.io/muse.md |
-| Edit details, top up credits | https://vault.72-60-43-195.sslip.io/edit |
+| Setup page | https://muse-vault-onboarding.vercel.app |
+| Guide Muse reads | https://muse-vault-onboarding.vercel.app/muse.md |
+| Edit details, top up credits | https://muse-vault-onboarding.vercel.app/?edit |
 
 ## What you need
 
@@ -23,13 +23,13 @@ Send Muse this message:
 ```
 Set up a custom connector called "muse-vault" so you can book air tickets for me without ever seeing my passport.
 
-1. Read and follow its guide: https://vault.72-60-43-195.sslip.io/muse.md
+1. Read and follow its guide: https://muse-vault-onboarding.vercel.app/muse.md
 2. Send me the setup link from the guide. I'll scan my passport and sign in there, then paste back the message it gives me.
 3. Create the connector from that message, and ask me for the agent key in your secure credential field, never in chat.
 4. Never ask me for passport details, date of birth, phone or email in chat.
 ```
 
-Muse may ask you to approve visiting `vault.72-60-43-195.sslip.io` and, later, `cn-api.sg.testnet.t3n.terminal3.io`. Approve both: they're the guide and pay page, and the T3N network.
+Muse may ask you to approve visiting `muse-vault-onboarding.vercel.app` and, later, `cn-api.sg.testnet.t3n.terminal3.io`. Approve both: they're the setup page, guide and pay page, and the T3N network.
 
 ## 2. Setup page (the link Muse sends you)
 

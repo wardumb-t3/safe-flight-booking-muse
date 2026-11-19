@@ -6,11 +6,35 @@
     {
       "source": "/t3/:path*",
       "destination": "https://cn-api.sg.testnet.t3n.terminal3.io/:path*"
+    },
+    {
+      "source": "/muse.md",
+      "destination": "https://vault.72-60-43-195.sslip.io/muse.md"
+    },
+    {
+      "source": "/muse-vault.json",
+      "destination": "https://vault.72-60-43-195.sslip.io/muse-vault.json"
+    },
+    {
+      "source": "/pay/:path*",
+      "destination": "https://vault.72-60-43-195.sslip.io/pay/:path*"
+    },
+    {
+      "source": "/api/pay/:path*",
+      "destination": "https://vault.72-60-43-195.sslip.io/api/pay/:path*"
+    },
+    {
+      "source": "/api/scan-link",
+      "destination": "https://vault.72-60-43-195.sslip.io/api/scan-link"
+    },
+    {
+      "source": "/api/stripe/webhook",
+      "destination": "https://vault.72-60-43-195.sslip.io/api/stripe/webhook"
     }
   ],
   "headers": [
     {
-      "source": "/(.*)",
+      "source": "/((?!pay/|api/pay/|api/scan-link|api/stripe/|muse\\.md|muse-vault\\.json).*)",
       "headers": [
         {
           "key": "Content-Security-Policy",
@@ -42,6 +66,18 @@
           "value": "public, max-age=31536000, immutable"
         }
       ]
+    }
+  ],
+  "redirects": [
+    {
+      "source": "/start",
+      "destination": "/",
+      "permanent": false
+    },
+    {
+      "source": "/edit",
+      "destination": "/?edit",
+      "permanent": false
     }
   ]
 }

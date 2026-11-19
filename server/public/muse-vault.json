@@ -4,6 +4,6 @@
   "contract_id": "z:72ffa900201a07ce9814f86479d14d10578ba91c:muse-flight",
   "contract_numeric_id": 1145,
   "contract_version": "0.9.1",
-  "pay_base_url": "https://vault.72-60-43-195.sslip.io",
+  "pay_base_url": "https://muse-vault-onboarding.vercel.app",
   "duffel_host": "api.duffel.com"
 }
