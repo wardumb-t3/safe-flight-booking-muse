@@ -33,6 +33,7 @@ Muse ── search / hold / status ──▶ T3N enclave: flight contract ──
 | **Understand how it works**, and who sees what | [docs/architecture.md](docs/architecture.md) |
 | **Fix an error** | [docs/troubleshooting.md](docs/troubleshooting.md) |
 | **See what's been tested** | [docs/verification.md](docs/verification.md) |
+| **Get more test credits or help** | [Terminal 3 developer Telegram](https://t.me/terminal3developer) |
 
 ## Who sees what
 
@@ -77,6 +78,12 @@ This connector is built from these Terminal 3 open-source projects. Read them to
 - **Passports with unspecified sex can't be booked**, because Duffel only accepts M or F.
 - **Credits.** Every call uses T3N test credits. Travellers top up Muse's key on the setup page; the operator tops up the pay agent. See [docs/self-host.md](docs/self-host.md#keeping-the-pay-agent-in-credits).
 - **Muse custom connectors are unreviewed by Meta.** Muse learns how to use this one from [`server/public/muse.md`](server/public/muse.md).
+
+## Getting help
+
+- **More T3N test credits, or help from the Terminal 3 team:** join the official **[Terminal 3 developer Telegram group](https://t.me/terminal3developer)**.
+- **A problem with this connector:** check [docs/troubleshooting.md](docs/troubleshooting.md), then open an issue on this repo.
+- **A security issue:** report it privately, as described in [SECURITY.md](SECURITY.md), not in Telegram or a public issue.
 
 ## Disclaimer
 

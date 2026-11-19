@@ -54,4 +54,4 @@ Muse then says setup is complete and asks if you'd like to book your first fligh
 - **Out of credits:** the edit page's **Top up Muse's key** adds credits to the key Muse already has. You don't need a new key.
 - **Remove everything:** delete the agent in the [T3N dashboard](https://testnet.network.terminal3.io), and remove the connector in Muse.
 
-Problems: [troubleshooting.md](troubleshooting.md).
+Problems: [troubleshooting.md](troubleshooting.md). Out of test credits, or need help from the Terminal 3 team? Join the [Terminal 3 developer Telegram group](https://t.me/terminal3developer).

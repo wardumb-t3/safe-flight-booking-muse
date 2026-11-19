@@ -12,6 +12,6 @@ For issues in the components this builds on, report to their own projects too:
 
 - [Terminal-3/z-tenant-flight](https://github.com/Terminal-3/z-tenant-flight) (the contract this one is forked from)
 - [Terminal-3/private-doc-scanner](https://github.com/Terminal-3/private-doc-scanner) (the passport scanner)
-- Terminal 3 network and SDK issues: through Terminal 3 ([terminal3.io](https://www.terminal3.io))
+- Terminal 3 network and SDK issues: through Terminal 3 ([terminal3.io](https://www.terminal3.io)). The [developer Telegram group](https://t.me/terminal3developer) is for general help, not vulnerability reports.
 
 This is open-source reference software provided as is; see the [Disclaimer](README.md#disclaimer).

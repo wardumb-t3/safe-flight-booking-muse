@@ -134,7 +134,7 @@ Follow [try-it.md](try-it.md), replacing the demo URLs with yours (`https://<you
 
 ### Keeping the pay agent in credits
 
-The pay agent pays every held order. If it runs out, the card is charged but the booking isn't confirmed yet. The pay page then says so and offers **Confirm booking again (no new charge)**, and the server logs `pay agent out of credits`. T3N can't report an agent's balance, so top it up regularly:
+The pay agent pays every held order. If your operator account itself runs short of test credits, ask in the [Terminal 3 developer Telegram group](https://t.me/terminal3developer). If it runs out, the card is charged but the booking isn't confirmed yet. The pay page then says so and offers **Confirm booking again (no new charge)**, and the server logs `pay agent out of credits`. T3N can't report an agent's balance, so top it up regularly:
 
 ```bash
 cd setup && npm run operator -- --pay-url https://vault.example.com --pay-credits 3000

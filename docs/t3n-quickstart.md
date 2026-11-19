@@ -65,6 +65,6 @@ You should see your `did:t3n:…` and your credit balance. It signs in through a
 | A search plus a hold | The traveller's Muse agent | ~100 |
 | Paying a hold | The operator's pay agent | ~100 |
 
-When your balance runs low on testnet, ask Terminal 3 for more test credits. Credits can't be transferred between accounts yourself.
+When your balance runs low on testnet, ask for more test credits in the **[Terminal 3 developer Telegram group](https://t.me/terminal3developer)**; that's also the place for help from the Terminal 3 team. You can't transfer credits between accounts yourself.
 
 Next: **[self-host.md](self-host.md)**.
