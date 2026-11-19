@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>muse-vault setup</title>
+  <link rel="stylesheet" href="/src/style.css">
+</head>
+<body>
+<main>
+  <h1>Set up muse-vault</h1>
+  <p class="sub">Let Muse book flights for you without ever seeing your passport. About 3 minutes, once.</p>
+
+  <section id="s-scan" class="step">
+    <h2><span class="n">1</span> Scan your passport</h2>
+    <p>Your passport is read on your phone and sealed to your own Terminal 3 vault. It never goes through Muse or this page.</p>
+    <div class="scan">
+      <canvas id="qr" width="180" height="180" aria-label="QR code for the scanner link"></canvas>
+      <div>
+        <p class="only-desktop">Scan this code with your phone's camera.</p>
+        <p><a id="scan-link" class="button secondary" target="_blank" rel="noopener">Open the scanner</a></p>
+        <p class="hint">In the scanner, pick <strong>Passport</strong>, review the fields, then <strong>Seal and send</strong>. Sign in there with the email you'll use below.</p>
+      </div>
+    </div>
+    <button id="scan-done">I've sealed it</button>
+    <p class="hint">Already set up? <a href="?edit" id="edit-link">Review your travel details or top up Muse's key</a>.</p>
+  </section>
+
+  <section id="s-signin" class="step" hidden>
+    <h2><span class="n">2</span> Sign in to Terminal 3</h2>
+    <p>Use the same email as in the scanner. No account yet? <a href="https://www.terminal3.io/claim-page" target="_blank" rel="noopener">Create one first</a>.</p>
+    <label for="email">Email</label>
+    <input id="email" type="email" autocomplete="email" inputmode="email">
+    <div id="otp-row" hidden>
+      <label for="otp">Code from your email</label>
+      <input id="otp" inputmode="numeric" autocomplete="one-time-code">
+    </div>
+    <button id="signin">Send me a code</button>
+  </section>
+
+  <section id="s-details" class="step" hidden>
+    <h2><span class="n">3</span> Connect your vault</h2>
+    <p id="vault-state" class="hint"></p>
+    <p>The airline also needs these. They're saved inside the enclave, not shown to Muse.</p>
+    <label for="title">Title</label>
+    <select id="title"><option value="">Choose…</option></select>
+    <label for="phone">Phone (international format)</label>
+    <input id="phone" type="tel" autocomplete="tel" placeholder="+65 9123 4567">
+    <button id="connect">Connect and create Muse's key</button>
+    <p class="hint">This replaces any earlier muse-vault key: put the new one in Muse.</p>
+  </section>
+
+  <section id="s-edit" class="step" hidden>
+    <h2><span class="n">✎</span> Your travel details and Muse key</h2>
+    <p class="hint" id="edit-source"></p>
+    <label for="e-title">Title</label>
+    <select id="e-title"><option value="">Choose…</option></select>
+    <label for="e-phone">Phone (international format)</label>
+    <input id="e-phone" type="tel" autocomplete="tel">
+    <fieldset>
+      <legend>Passport, as printed</legend>
+      <label for="e-number">Passport number</label>
+      <input id="e-number" autocomplete="off" spellcheck="false">
+      <label for="e-country">Issuing country (2 or 3 letters, e.g. SG or SGP)</label>
+      <input id="e-country" maxlength="3" autocomplete="off" spellcheck="false">
+      <label for="e-expiry">Expiry date</label>
+      <input id="e-expiry" type="date">
+      <label for="e-dob">Date of birth</label>
+      <input id="e-dob" type="date">
+      <label for="e-sex">Sex</label>
+      <select id="e-sex"><option value="">Choose…</option><option value="F">F</option><option value="M">M</option></select>
+    </fieldset>
+    <button id="e-save">Save my details</button>
+    <button id="e-use-scan" class="secondary">Use my scan instead</button>
+    <h3>Top up Muse's key</h3>
+    <p class="hint" id="t-balance">Checking your credits…</p>
+    <label for="t-agent">Muse key</label>
+    <select id="t-agent"></select>
+    <label for="t-amount">Credits to add (a search plus a booking uses about 100)</label>
+    <input id="t-amount" type="number" min="1" step="1" inputmode="numeric">
+    <button id="t-fund" disabled>Add credits</button>
+    <button id="t-retire" class="secondary">Remove my other muse-vault keys</button>
+    <p class="hint">Saved details are used instead of your scan when Muse holds a flight. They're stored inside the Terminal 3 enclave; Muse never sees them.</p>
+  </section>
+
+  <section id="s-done" class="step" hidden>
+    <h2><span class="n">4</span> Add muse-vault to Muse</h2>
+    <ol>
+      <li>Copy this message and send it to Muse. It tells Muse what muse-vault is and where its guide is. Nothing in it is secret.
+        <pre id="settings"></pre><button id="copy-settings" class="small">Copy message</button>
+      </li>
+      <li>When Muse asks for the key, put this in its <strong>secure credential field</strong>, not in the chat. It's shown only once.
+        <div class="secret"><code id="agent-key"></code><button id="copy-key" class="small">Copy key</button></div>
+      </li>
+      <li>Then ask: <strong>"Book me a flight from London to New York on 20 December."</strong></li>
+    </ol>
+    <button id="fund" class="secondary" hidden>Add credits</button>
+    <p class="hint">Need to fix a detail later (e.g. the passport's sex)? <a href="?edit">Review or correct your travel details</a>.</p>
+    <p class="hint">You can close this page once the key is in Muse. To stop Muse booking, remove the agent in your Terminal 3 dashboard.</p>
+  </section>
+
+  <p id="status" role="status" aria-live="polite"></p>
+
+  <details class="who">
+    <summary>Who sees your passport?</summary>
+    <p>Your passport, date of birth, phone and email go from your Terminal 3 vault, inside a hardware enclave, straight to the airline's booking system (Duffel), and to the booking service operator as the seller. Muse and Meta never see them. Muse gets a key that can only search, hold a seat and check its status.</p>
+  </details>
+</main>
+<script type="module" src="/src/main.ts"></script>
+</body>
+</html>

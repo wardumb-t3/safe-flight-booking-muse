@@ -1,0 +1,23 @@
+{
+  "name": "muse-vault-onboarding",
+  "version": "0.1.0",
+  "private": true,
+  "license": "MIT",
+  "type": "module",
+  "description": "Browser onboarding for muse-vault: scan the passport, sign in to T3N, connect the vault and create Muse's agent key. Replaces the command-line traveller setup.",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview --port 4174 --strictPort",
+    "test": "node --test test/*.test.mjs"
+  },
+  "dependencies": {
+    "@terminal3/t3n-sdk": "^5.41.0",
+    "qrcode": "^1.5.4"
+  },
+  "devDependencies": {
+    "@types/qrcode": "^1.5.5",
+    "typescript": "^5.9.3",
+    "vite": "^7.3.8"
+  }
+}

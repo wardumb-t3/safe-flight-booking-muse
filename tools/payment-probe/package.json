@@ -1,0 +1,6 @@
+{
+  "name": "muse-vault-payment-probe",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=20" }
+}

@@ -1,0 +1,65 @@
+// Host packages vendored from Terminal-3/trinity release testnet-v1.0.12
+// (81f207c00): host:interfaces@2.4.0 and host:tenant@2.0.0. Importing
+// http-with-placeholders puts this contract in the tenant-http-placeholders
+// world. Re-vendor from the release you deploy to if it changes.
+package z:muse-vault-flight@0.9.1;
+
+world muse-vault-flight {
+    import host:tenant/tenant-context@2.0.0;
+    import host:interfaces/logging@2.4.0;
+    import host:interfaces/kv-store@2.4.0;
+    import host:interfaces/http@2.4.0;                    // search (no PII)
+    import host:interfaces/http-with-placeholders@2.4.0;  // booking (PII via placeholders)
+
+    export contracts;
+}
+
+interface contracts {
+    /// Standard 3-field envelope used by all contracts callable from the node.
+    record generic-input {
+        input:        option<list<u8>>,
+        user-profile: option<list<u8>>,
+        context:      option<list<u8>>,
+    }
+
+    /// The customer saves their own traveller record: title, phone and, unless the
+    /// passport comes from the Private Doc Scanner, their passport (with date of
+    /// birth and sex). Name and email always come from their T3N profile.
+    /// Refused on a delegated call. Input: see examples/. Output: { saved, has_passport }
+    save-traveller: func(req: generic-input) -> result<list<u8>, string>;
+
+    /// The customer reads their own traveller record, to review and edit it.
+    /// Refused on a delegated call. Output: { found, traveller? }
+    get-traveller: func(req: generic-input) -> result<list<u8>, string>;
+
+    /// The customer deletes their own traveller record. Refused on a delegated call.
+    /// Output: { deleted }
+    forget-traveller: func(req: generic-input) -> result<list<u8>, string>;
+
+    /// Search Duffel for flights. No PII.
+    /// Input:  { origin, destination, departure_date, cabin_class, adult_count }
+    /// Output: { offers: [{ id, total_amount, total_currency, expires_at, passenger_ids }] }
+    search-offers: func(req: generic-input) -> result<list<u8>, string>;
+
+    /// Hold an offer for the calling customer without paying (a Duffel hold order).
+    /// The input carries no passenger details; the output carries none either.
+    /// Input:  same as book-offer
+    /// Output: { id, pnr, status, total_amount, total_currency, payment_required_by,
+    ///           price_guarantee_expires_at, ticketed, slices }
+    hold-offer: func(req: generic-input) -> result<list<u8>, string>;
+
+    /// Status of an order placed for the calling customer, without passenger data.
+    /// Input:  { order_id }   Output: same shape as hold-offer
+    order-status: func(req: generic-input) -> result<list<u8>, string>;
+
+    /// Pay a held order from the operator's Duffel balance. Only the operator's pay
+    /// agent (secrets: pay_agent_did), on a call made for the operator itself.
+    /// Input:  { order_id, amount, currency }
+    /// Output: { paid, payment_id?, code? }   (paid=false: Duffel refused; refund the card)
+    pay-hold: func(req: generic-input) -> result<list<u8>, string>;
+
+    /// Book an offer for the calling customer. The input carries no passenger details.
+    /// Input:  { offer_id, passenger_id, total_amount, total_currency, scanner_request_id? }
+    /// Output: { id, pnr, status }
+    book-offer: func(req: generic-input) -> result<list<u8>, string>;
+}

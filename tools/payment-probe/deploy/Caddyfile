@@ -1,0 +1,9 @@
+# Replace probe.example.com with a hostname whose DNS A/AAAA record points at
+# your VPS. Caddy fetches a TLS certificate for it automatically.
+probe.example.com {
+	encode gzip
+	reverse_proxy 127.0.0.1:3000 {
+		# checkout.js builds its success/cancel URLs from the forwarded host.
+		header_up X-Forwarded-Host {host}
+	}
+}

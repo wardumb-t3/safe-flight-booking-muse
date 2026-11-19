@@ -1,0 +1,21 @@
+[Unit]
+Description=muse-vault pay server
+After=network.target
+
+[Service]
+Type=simple
+User=musevault
+WorkingDirectory=/opt/muse-vault/server
+# STRIPE_SECRET_KEY, STRIPE_PUBLISHABLE_KEY (test), T3N_PAY_AGENT_KEY, ONBOARDING_URL (the Vercel onboarding page), optional STRIPE_WEBHOOK_SECRET. No Duffel token.
+EnvironmentFile=/etc/muse-vault.env
+Environment=PORT=3200 DATA_DIR=/var/lib/muse-vault
+StateDirectory=muse-vault
+ExecStart=/usr/bin/node server.mjs
+Restart=on-failure
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

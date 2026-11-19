@@ -1,0 +1,6 @@
+# Add to /etc/caddy/Caddyfile and replace the hostname with yours. No domain? Use
+# sslip.io: vault.<your-ip-with-dashes>.sslip.io, e.g. vault.203-0-113-5.sslip.io.
+vault.example.com {
+	encode gzip
+	reverse_proxy 127.0.0.1:3200
+}

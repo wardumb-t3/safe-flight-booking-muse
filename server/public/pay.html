@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Flight Checkout</title>
+  <script src="https://js.stripe.com/v3/"></script>
+  <style>
+    :root { --bg:#f7f7f5; --fg:#1b1b1b; --muted:#5d5d5d; --card:#fff; --line:#dedcd6; --accent:#0f6e63; --ok:#0f6e63; --bad:#a3302a; }
+    @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg:#141414; --fg:#eee; --muted:#a9a9a9; --card:#1f1f1f; --line:#333; --accent:#4fc2b2; --ok:#4fc2b2; --bad:#ef7d74; } }
+    * { box-sizing: border-box; }
+    body { margin:0; background:var(--bg); color:var(--fg); font:16px/1.5 system-ui, sans-serif; }
+    main { max-width:520px; margin:0 auto; padding:24px 16px 48px; }
+    h1 { font-size:1.35rem; margin:0 0 4px; }
+    .sub { color:var(--muted); margin:0 0 20px; }
+    section { background:var(--card); border:1px solid var(--line); border-radius:10px; padding:16px; }
+    dl { display:grid; grid-template-columns:auto 1fr; gap:4px 12px; margin:0 0 16px; }
+    dt { color:var(--muted); } dd { margin:0; font-variant-numeric:tabular-nums; word-break:break-all; }
+    .total { font-size:1.5rem; font-weight:600; }
+    label { display:block; font-size:.9rem; color:var(--muted); margin-bottom:6px; }
+    #card { padding:12px; border:1px solid var(--line); border-radius:8px; }
+    button { margin-top:12px; width:100%; padding:12px; border:0; border-radius:8px; background:var(--accent); color:#fff; font-size:1rem; font-weight:600; cursor:pointer; }
+    button:disabled { opacity:.5; cursor:default; }
+    #status { margin-top:12px; font-weight:600; min-height:1.5em; }
+    .ok { color:var(--ok); } .bad { color:var(--bad); }
+    small { color:var(--muted); }
+  </style>
+</head>
+<body>
+<main>
+  <h1>Pay for your held flight</h1>
+  <p class="sub">Your seat is held. Pay here to confirm it and get the ticket issued.</p>
+  <section>
+    <dl>
+      <dt>Order</dt><dd id="order">–</dd>
+      <dt>Total</dt><dd class="total" id="total">–</dd>
+    </dl>
+    <label for="card">Card</label>
+    <div id="card"></div>
+    <button id="pay" disabled>Pay</button>
+    <button id="retry" hidden>Confirm booking again (no new charge)</button>
+    <div id="status" role="status" aria-live="polite"></div>
+  </section>
+  <p><small>This page never sees who is flying: the traveller's details went from the Terminal 3 enclave straight to Duffel. Card details go to Stripe; this server only sees the payment result. If the airline won't accept the payment, you are refunded automatically.</small></p>
+</main>
+<script>
+  const orderId = decodeURIComponent(location.pathname.split("/").pop());
+  const q = new URLSearchParams(location.search);
+  const amount = q.get("amount"), currency = (q.get("currency") || "").toUpperCase();
+  const statusEl = document.getElementById("status"), payBtn = document.getElementById("pay"), retryBtn = document.getElementById("retry");
+  const show = (t, cls) => { statusEl.textContent = t; statusEl.className = cls || ""; };
+  document.getElementById("order").textContent = orderId;
+
+  const valid = /^ord_[A-Za-z0-9]+$/.test(orderId) && /^\d+(\.\d{1,2})?$/.test(amount || "") && /^[A-Z]{3}$/.test(currency);
+  if (!valid) {
+    show("This link is incomplete: it needs /pay/<order_id>?amount=…&currency=…", "bad");
+  } else {
+    document.getElementById("total").textContent = `${amount} ${currency}`;
+    payBtn.textContent = `Pay ${amount} ${currency}`;
+    (async () => {
+      const cfg = await (await fetch("/api/pay/config")).json();
+      const stripe = Stripe(cfg.publishableKey);
+      const card = stripe.elements().create("card");
+      card.mount("#card");
+      card.on("ready", () => { payBtn.disabled = false; });
+      card.on("change", (e) => e.error ? show(e.error.message, "bad") : show(""));
+
+      // Confirms the seat for a card payment that already went through. Never charges.
+      async function confirmBooking(paymentIntent) {
+        show(intentNote(paymentIntent));
+        const resp = await fetch("/api/pay/complete", { method: "POST", headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ payment_intent: paymentIntent }) });
+        const done = await resp.json().catch(() => ({}));
+        if (done.outcome === "paid") {
+          retryBtn.hidden = true; payBtn.hidden = true;
+          show(`Paid. Order ${orderId} is confirmed (payment ${done.duffel_payment}). Ask Muse for the order status to see the ticket.`, "ok");
+        } else if (done.outcome === "refunded") {
+          retryBtn.hidden = true;
+          show(`The airline did not accept the payment (${done.reason}), so your card was refunded. The hold may have expired or the price changed.`, "bad");
+        } else {
+          payBtn.hidden = true;
+          retryBtn.hidden = false;
+          retryBtn.onclick = () => { retryBtn.disabled = true; confirmBooking(paymentIntent).finally(() => { retryBtn.disabled = false; }); };
+          show(done.reason || `Confirming the booking failed (${done.outcome || resp.status}). Your card payment is kept; don't pay again. Press "Confirm booking again".`, "bad");
+        }
+      }
+      const intentNote = () => "Card accepted. Confirming the flight with the airline…";
+
+      payBtn.addEventListener("click", async () => {
+        payBtn.disabled = true;
+        show("Processing…");
+        try {
+          const r = await fetch("/api/pay/intent", { method: "POST", headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ order_id: orderId, amount, currency }) });
+          const intent = await r.json();
+          if (r.status === 409) { show("This order is already paid. Ask Muse for the order status.", "ok"); return; }
+          if (!r.ok) throw new Error(intent.error || "Could not start the payment");
+          let paymentIntent = intent.paymentIntent;
+          if (!intent.alreadyCharged) {
+            const result = await stripe.confirmCardPayment(intent.clientSecret, { payment_method: { card } });
+            if (result.error) {
+              show(`Card declined: ${result.error.message} (code: ${result.error.decline_code || result.error.code})`, "bad");
+              payBtn.disabled = false;
+              return;
+            }
+            paymentIntent = result.paymentIntent.id;
+          }
+          await confirmBooking(paymentIntent);
+        } catch (e) {
+          show(e.message, "bad");
+          payBtn.disabled = false;
+        }
+      });
+    })();
+  }
+</script>
+</body>
+</html>

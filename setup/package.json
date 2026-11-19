@@ -1,0 +1,21 @@
+{
+  "name": "muse-vault-setup",
+  "version": "0.1.0",
+  "private": true,
+  "license": "MIT",
+  "type": "module",
+  "description": "One-time setup for muse-vault: the operator hosts the flight contract; each traveller connects their passport vault and their Muse agent.",
+  "scripts": {
+    "operator": "tsx --env-file-if-exists=.env operator.ts",
+    "traveller": "tsx --env-file-if-exists=.env traveller.ts",
+    "check": "tsc --noEmit -p tsconfig.json"
+  },
+  "dependencies": {
+    "@terminal3/t3n-sdk": "^5.41.0",
+    "tsx": "^4.23.15"
+  },
+  "devDependencies": {
+    "@types/node": "^22.20.5",
+    "typescript": "^5.9.3"
+  }
+}

@@ -1,0 +1,19 @@
+[Unit]
+Description=muse-vault payment probe
+After=network.target
+
+[Service]
+Type=simple
+User=probe
+WorkingDirectory=/opt/payment-probe
+# Holds STRIPE_SECRET_KEY and STRIPE_PUBLISHABLE_KEY (test keys); chmod 600, owned by root.
+EnvironmentFile=/etc/payment-probe.env
+ExecStart=/usr/bin/node server.mjs
+Restart=on-failure
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=true
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
